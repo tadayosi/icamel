@@ -2,12 +2,14 @@ package io.github.tadayosi.icamel;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Properties;
 
 import io.github.spencerpark.jupyter.kernel.BaseKernel;
 import io.github.spencerpark.jupyter.kernel.LanguageInfo;
 import io.github.spencerpark.jupyter.kernel.ReplacementOptions;
 import io.github.spencerpark.jupyter.kernel.display.DisplayData;
+import io.github.spencerpark.jupyter.messages.Header;
 import org.apache.camel.k.Runtime;
 import org.apache.camel.k.Source;
 import org.apache.camel.k.Sources;
@@ -34,6 +36,9 @@ public class CamelKernel extends BaseKernel {
     }
 
     private final LanguageInfo languageInfo;
+    private final String banner;
+    private final List<LanguageInfo.Help> helpLinks;
+
     private final ApplicationRuntime runtime;
 
     public CamelKernel() throws Exception {
@@ -44,6 +49,19 @@ public class CamelKernel extends BaseKernel {
             .pygments("javascript")
             .codemirror("javascript")
             .build();
+        banner = new StringBuilder()
+            .append(String.format("ICamel kernel %s\n", VERSION))
+            .append(String.format("Camel %s\n", CAMEL_VERSION))
+            .append(String.format("Camel K %s\n", CAMEL_K_VERSION))
+            .append(String.format("Protocol v%s implementation by %s %s\n",
+                Header.PROTOCOL_VERISON,
+                KERNEL_META.getOrDefault("project", "UNKNOWN"),
+                KERNEL_META.getOrDefault("version", "UNKNOWN")))
+            .append(String.format("Java %s", java.lang.Runtime.version()))
+            .toString();
+        helpLinks = List.of(
+            new LanguageInfo.Help("ICamel", "https://github.com/tadayosi/icamel")
+        );
 
         runtime = new ApplicationRuntime();
         runtime.addListener(new ContextConfigurer());
@@ -52,6 +70,16 @@ public class CamelKernel extends BaseKernel {
     @Override
     public LanguageInfo getLanguageInfo() {
         return languageInfo;
+    }
+
+    @Override
+    public String getBanner() {
+        return this.banner;
+    }
+
+    @Override
+    public List<LanguageInfo.Help> getHelpLinks() {
+        return this.helpLinks;
     }
 
     @Override
