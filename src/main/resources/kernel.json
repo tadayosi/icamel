@@ -1,0 +1,13 @@
+{
+  "argv": [
+    "java",
+    "-jar",
+    "${user.home}/.local/share/jupyter/kernels/camel/icamel-${project.version}.jar",
+    "{connection_file}"
+  ],
+  "display_name": "Camel",
+  "language": "camel",
+  "interrupt_mode": "message",
+  "env": {
+  }
+}
