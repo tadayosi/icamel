@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 
 import io.github.spencerpark.jupyter.kernel.BaseKernel;
 import io.github.spencerpark.jupyter.kernel.LanguageInfo;
@@ -16,6 +18,7 @@ import org.apache.camel.k.Sources;
 import org.apache.camel.k.listener.ContextConfigurer;
 import org.apache.camel.k.listener.RoutesConfigurer;
 import org.apache.camel.k.main.ApplicationRuntime;
+import org.apache.camel.k.support.RuntimeSupport;
 
 public class CamelKernel extends BaseKernel {
 
@@ -39,9 +42,9 @@ public class CamelKernel extends BaseKernel {
     private final String banner;
     private final List<LanguageInfo.Help> helpLinks;
 
-    private final ApplicationRuntime runtime;
+    private final Runtime runtime;
 
-    public CamelKernel() throws Exception {
+    public CamelKernel() {
         languageInfo = new LanguageInfo.Builder("Camel")
             .version(CAMEL_VERSION)
             .mimetype("text/javascript")
@@ -63,8 +66,24 @@ public class CamelKernel extends BaseKernel {
             new LanguageInfo.Help("ICamel", "https://github.com/tadayosi/icamel")
         );
 
-        runtime = new ApplicationRuntime();
-        runtime.addListener(new ContextConfigurer());
+        runtime = new CamelKernelRuntime();
+        startRuntime();
+    }
+
+    private void startRuntime() {
+        runtime.getCamelContext().start();
+    }
+
+    private void stopRuntime() {
+        try {
+            runtime.stop();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Runtime getRuntime() {
+        return runtime;
     }
 
     @Override
@@ -84,31 +103,13 @@ public class CamelKernel extends BaseKernel {
 
     @Override
     public void onShutdown(boolean isRestarting) {
-        if (isRestarting) {
-            return;
-        }
         stopRuntime();
-    }
-
-    private void stopRuntime() {
-        try {
-            runtime.stop();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
     public DisplayData eval(String expr) throws Exception {
-        runtime.addListener(new RoutesConfigurer() {
-            @Override
-            protected void accept(Runtime runtime) {
-                Source source = Sources.fromBytes("js", expr.getBytes(StandardCharsets.UTF_8));
-                load(runtime, source);
-            }
-        });
-        runtime.run();
-
+        Source source = Sources.fromBytes("js", expr.getBytes(StandardCharsets.UTF_8));
+        RoutesConfigurer.load(runtime, source);
         return null;
     }
 
