@@ -34,8 +34,7 @@ public class CamelKernelTest {
 
     @Test
     public void testEval() throws Exception {
-        MockEndpoint out = (MockEndpoint) CamelContextHelper.resolveEndpoint(context, "mock:out", null);
-        //MockEndpoint out = CamelContextHelper.resolveEndpoint(context, "mock:out", null, MockEndpoint.class);
+        MockEndpoint out = context.getEndpoint("mock:out", MockEndpoint.class);
         out.expectedMessageCount(1);
 
         kernel.eval("console.log('hello')");
