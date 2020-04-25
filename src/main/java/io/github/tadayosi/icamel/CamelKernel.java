@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Properties;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
 
 import io.github.spencerpark.jupyter.kernel.BaseKernel;
 import io.github.spencerpark.jupyter.kernel.LanguageInfo;
@@ -15,10 +13,7 @@ import io.github.spencerpark.jupyter.messages.Header;
 import org.apache.camel.k.Runtime;
 import org.apache.camel.k.Source;
 import org.apache.camel.k.Sources;
-import org.apache.camel.k.listener.ContextConfigurer;
 import org.apache.camel.k.listener.RoutesConfigurer;
-import org.apache.camel.k.main.ApplicationRuntime;
-import org.apache.camel.k.support.RuntimeSupport;
 
 public class CamelKernel extends BaseKernel {
 
@@ -103,6 +98,11 @@ public class CamelKernel extends BaseKernel {
 
     @Override
     public void onShutdown(boolean isRestarting) {
+        stopRuntime();
+    }
+
+    @Override
+    public void interrupt() {
         stopRuntime();
     }
 
