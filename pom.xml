@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>io.github.tadayosi</groupId>
@@ -64,20 +65,37 @@
 
     <!-- Camel -->
     <dependency>
+      <groupId>org.apache.camel</groupId>
+      <artifactId>camel-core</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.apache.camel.k</groupId>
       <artifactId>camel-k-runtime-main</artifactId>
+    </dependency>
+    <!-- Camel K languages -->
+    <dependency>
+      <groupId>org.apache.camel.k</groupId>
+      <artifactId>camel-k-loader-groovy</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.camel.k</groupId>
+      <artifactId>camel-k-loader-java</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.camel.k</groupId>
       <artifactId>camel-k-loader-js</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.apache.camel</groupId>
-      <artifactId>camel-timer</artifactId>
+      <groupId>org.apache.camel.k</groupId>
+      <artifactId>camel-k-loader-kotlin</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.apache.camel</groupId>
-      <artifactId>camel-log</artifactId>
+      <groupId>org.apache.camel.k</groupId>
+      <artifactId>camel-k-loader-xml</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.camel.k</groupId>
+      <artifactId>camel-k-loader-yaml</artifactId>
     </dependency>
 
     <!-- testing -->

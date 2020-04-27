@@ -1,7 +1,6 @@
 package io.github.tadayosi.icamel;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Properties;
 
@@ -12,7 +11,6 @@ import io.github.spencerpark.jupyter.kernel.display.DisplayData;
 import io.github.spencerpark.jupyter.messages.Header;
 import org.apache.camel.k.Runtime;
 import org.apache.camel.k.Source;
-import org.apache.camel.k.Sources;
 import org.apache.camel.k.listener.RoutesConfigurer;
 
 public class CamelKernel extends BaseKernel {
@@ -38,6 +36,7 @@ public class CamelKernel extends BaseKernel {
     private final List<LanguageInfo.Help> helpLinks;
 
     private final Runtime runtime;
+    private final LanguageResolver languageResolver;
 
     public CamelKernel() {
         languageInfo = new LanguageInfo.Builder("Camel")
@@ -60,6 +59,8 @@ public class CamelKernel extends BaseKernel {
         helpLinks = List.of(
             new LanguageInfo.Help("ICamel", "https://github.com/tadayosi/icamel")
         );
+
+        languageResolver = new LanguageResolver();
 
         runtime = new CamelKernelRuntime();
         startRuntime();
@@ -108,7 +109,7 @@ public class CamelKernel extends BaseKernel {
 
     @Override
     public DisplayData eval(String expr) throws Exception {
-        Source source = Sources.fromBytes("js", expr.getBytes(StandardCharsets.UTF_8));
+        Source source = languageResolver.resolve(expr);
         RoutesConfigurer.load(runtime, source);
         return null;
     }

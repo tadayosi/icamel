@@ -5,7 +5,6 @@ import java.util.Collection;
 import org.apache.camel.CamelContext;
 import org.apache.camel.impl.DefaultCamelContext;
 import org.apache.camel.k.Runtime;
-import org.apache.camel.k.main.ApplicationRuntime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
