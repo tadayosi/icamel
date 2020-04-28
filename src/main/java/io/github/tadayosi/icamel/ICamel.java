@@ -14,7 +14,15 @@ public class ICamel {
 
     public static void main(String[] args) throws Exception {
         if (args.length < 1) {
-            throw new IllegalArgumentException("Missing connection file argument");
+            System.out.println(
+                String.format("ICamel %s - Apache Camel kernel for Jupyter notebook\n"
+                        + "\n"
+                        + "Usage:\n"
+                        + "  java -jar icamel-%s.jar [connection_file]\n"
+                        + "\n"
+                        + "For more info, see: https://github.com/tadayosi/icamel/",
+                    CamelKernel.VERSION, CamelKernel.VERSION));
+            return;
         }
 
         Path connectionFile = Paths.get(args[0]);
