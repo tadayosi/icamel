@@ -54,6 +54,10 @@ The opinionated default language for ICamel is JavaScript. To use other language
   }
   ```
 
+## Supported Camel components
+
+At this moment, only components that are included in `camel-core` are supported. Automatic downloading of Camel component dependencies will be implemented in a future version.
+
 ## Installing
 
 Download the latest `icamel-0.x.jar` from https://github.com/tadayosi/icamel/packages.
