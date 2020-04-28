@@ -2,7 +2,7 @@
   "argv": [
     "java",
     "-jar",
-    "${user.home}/.local/share/jupyter/kernels/camel/icamel-${project.version}.jar",
+    "<your-camel-kernel-dir>/icamel-0.x.jar",
     "{connection_file}"
   ],
   "display_name": "Camel",
