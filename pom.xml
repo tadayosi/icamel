@@ -129,7 +129,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
-        <version>3.1.1</version>
+        <version>3.2.0</version>
         <configuration>
           <descriptorRefs>
             <descriptorRef>jar-with-dependencies</descriptorRef>
@@ -137,7 +137,6 @@
           <appendAssemblyId>false</appendAssemblyId>
           <archive>
             <manifest>
-              <addClasspath>true</addClasspath>
               <mainClass>io.github.tadayosi.icamel.ICamel</mainClass>
             </manifest>
           </archive>
