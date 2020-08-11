@@ -1,7 +1,5 @@
 package io.github.tadayosi.icamel;
 
-import java.util.Arrays;
-
 import org.eclipse.lsp4j.Position;
 
 public class CompletionHelper {

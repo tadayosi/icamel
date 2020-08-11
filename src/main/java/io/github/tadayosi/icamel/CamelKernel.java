@@ -2,7 +2,6 @@ package io.github.tadayosi.icamel;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 import java.util.Properties;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;

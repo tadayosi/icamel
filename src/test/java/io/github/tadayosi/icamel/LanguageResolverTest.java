@@ -1,7 +1,5 @@
 package io.github.tadayosi.icamel;
 
-import java.util.Optional;
-
 import org.apache.camel.k.Source;
 import org.junit.Before;
 import org.junit.Test;

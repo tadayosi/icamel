@@ -1,8 +1,5 @@
 package io.github.tadayosi.icamel;
 
-import java.util.concurrent.ExecutionException;
-
-import com.google.common.base.Strings;
 import io.github.spencerpark.jupyter.kernel.LanguageInfo;
 import io.github.spencerpark.jupyter.kernel.ReplacementOptions;
 import org.apache.camel.CamelContext;
