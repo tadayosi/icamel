@@ -1,5 +1,6 @@
 package io.github.tadayosi.icamel;
 
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Optional;
@@ -13,45 +14,40 @@ public class LanguageResolver {
 
     public static final String DEFAULT_LANGUAGE = "js";
 
+    private static final Charset CHARSET = StandardCharsets.UTF_8;
+
     private static final Pattern CLASS_PATTERN =
         Pattern.compile("^\\s*public\\s+class\\s+([a-zA-Z_$][a-zA-Z_$\\d]*)\\s*.*$");
 
     public LanguageResolver() {
     }
 
-    public Source resolve(String expr) {
-        Optional<String> language = resolveLanguage(expr);
-        if (language.filter("java"::equals).isPresent()) {
-            return Sources.fromBytes(
-                findJavaClassName(expr),
-                language.get(),
-                null,
-                expr.getBytes(StandardCharsets.UTF_8));
+    public String resolve(String expr) {
+        if (expr.startsWith("<")) {
+            return "xml";
+        } else if (expr.startsWith("- ")) {
+            return "yaml";
         }
-        return Sources.fromBytes(
-            language.orElse(DEFAULT_LANGUAGE),
-            expr.getBytes(StandardCharsets.UTF_8));
-    }
 
-    private Optional<String> resolveLanguage(String expr) {
-        Optional<String> language = Optional.empty();
         int eol = expr.indexOf(System.lineSeparator());
         if (eol < 0) {
             // one-liner
-            return language;
+            return DEFAULT_LANGUAGE;
         }
+
         String begin = expr.substring(0, eol);
         if (begin.startsWith("//") && begin.contains("language=")) {
-            // check comment
-            language = Optional.of(begin.trim().split("=")[1]);
-        } else if (begin.startsWith("<")) {
-            // xml
-            language = Optional.of("xml");
-        } else if (begin.startsWith("- ")) {
-            // yaml
-            language = Optional.of("yaml");
+            return begin.trim().split("=")[1];
         }
-        return language;
+        return DEFAULT_LANGUAGE;
+    }
+
+    public Source toSource(String expr) {
+        String language = resolve(expr);
+        if ("java".equals(language)) {
+            return Sources.fromBytes(findJavaClassName(expr), language, null, expr.getBytes(CHARSET));
+        }
+        return Sources.fromBytes(language, expr.getBytes(CHARSET));
     }
 
     private String findJavaClassName(String expr) {

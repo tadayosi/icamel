@@ -1,6 +1,10 @@
 package io.github.tadayosi.icamel;
 
+import java.util.concurrent.ExecutionException;
+
+import com.google.common.base.Strings;
 import io.github.spencerpark.jupyter.kernel.LanguageInfo;
+import io.github.spencerpark.jupyter.kernel.ReplacementOptions;
 import org.apache.camel.CamelContext;
 import org.apache.camel.ServiceStatus;
 import org.apache.camel.component.mock.MockEndpoint;
@@ -41,6 +45,33 @@ public class CamelKernelTest {
         assertThat(context.getStatus()).isEqualTo(ServiceStatus.Started);
         assertThat(context.getRoutes()).hasSize(1);
         out.assertIsSatisfied();
+    }
+
+    @Test
+    public void testComplete() throws Exception {
+        // js (default)
+        ReplacementOptions options = kernel.complete(
+            "from('timer:tick?period=3000').log('hello!')",
+            6);
+        assertThat(options.getReplacements()).isNotEmpty();
+
+        // groovy
+        options = kernel.complete(
+            "// language=groovy\nfrom('timer:tick?period=3000').log('hello!')",
+            25);
+        assertThat(options.getReplacements()).isNotEmpty();
+
+        // java
+        options = kernel.complete(
+            "// language=java\nfrom(\"timer:tick?period=3000\").log(\"hello!\")",
+            23);
+        assertThat(options.getReplacements()).isNotEmpty();
+
+        // xml
+        options = kernel.complete(
+            "<from uri=\"\" xmlns=\"http://camel.apache.org/schema/spring\"></from>",
+            11);
+        assertThat(options.getReplacements()).isNotEmpty();
     }
 
     @Test
