@@ -15,4 +15,13 @@ public class CompletionHelperTest {
         int at = 17;
         assertThat(CompletionHelper.position(code, at)).isEqualTo(new Position(1, 6));
     }
+
+    @Test
+    public void testAt() {
+        String code = "// camel-k\n" +
+            "from('timer:js?period=3000')\n" +
+            "    .log('hello!')";
+        Position position = new Position(1, 6);
+        assertThat(CompletionHelper.at(code, position)).isEqualTo(17);
+    }
 }

@@ -169,7 +169,10 @@ public class CamelKernel extends BaseKernel {
         }
 
         TextDocumentService textDocumentService = getTextDocumentService(code, filename);
-        List<String> options = getCompletions(textDocumentService, code, at, filename);
+        List<CompletionItem> completions = getCompletions(textDocumentService, code, at, filename);
+        List<String> options = completions.stream()
+            .map(CompletionItem::getLabel)
+            .collect(Collectors.toList());
 
         if (LOGGER.isDebugEnabled()) {
             int n = 10;
@@ -178,7 +181,18 @@ public class CamelKernel extends BaseKernel {
                 options.size() <= n ? "" : " ...");
         }
 
-        return new ReplacementOptions(options, at, at);
+        if (options.isEmpty()) {
+            return null;
+        }
+
+        int start = CompletionHelper.at(code, completions.get(0).getTextEdit().getRange().getStart());
+        if ("java".equals(language)) {
+            // hack for java code with lsp
+            int offset = "// camel".length() + 1;
+            start -= offset;
+            at -= offset;
+        }
+        return new ReplacementOptions(options, start, at);
     }
 
     private TextDocumentService getTextDocumentService(String code, String filename) {
@@ -187,13 +201,10 @@ public class CamelKernel extends BaseKernel {
         return languageServer.getTextDocumentService();
     }
 
-    private List<String> getCompletions(TextDocumentService textDocumentService, String code, int at, String filename) throws Exception {
+    private List<CompletionItem> getCompletions(TextDocumentService textDocumentService, String code, int at, String filename) throws Exception {
         CompletionParams params = new CompletionParams(
             new TextDocumentIdentifier(filename), CompletionHelper.position(code, at));
-        List<CompletionItem> completions = textDocumentService.completion(params).get().getLeft();
-        return completions.stream()
-            .map(CompletionItem::getLabel)
-            .collect(Collectors.toList());
+        return textDocumentService.completion(params).get().getLeft();
     }
 
     private class KernelLanguageClient implements LanguageClient {
