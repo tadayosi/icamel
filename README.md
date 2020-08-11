@@ -60,7 +60,7 @@ At this moment, only components that are included in `camel-core` are supported.
 
 ## Installing
 
-Download the latest `icamel-0.x.jar` from https://github.com/tadayosi/icamel/packages.
+Download the latest `icamel-0.x.jar` from https://github.com/tadayosi/icamel/releases.
 
 Then create a directory `camel` under the Jupyter kernels directory:
 
