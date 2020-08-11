@@ -207,7 +207,7 @@ public class CamelKernel extends BaseKernel {
         return textDocumentService.completion(params).get().getLeft();
     }
 
-    private class KernelLanguageClient implements LanguageClient {
+    private static class KernelLanguageClient implements LanguageClient {
         @Override
         public void telemetryEvent(Object o) {
         }
