@@ -1,4 +1,5 @@
 .*
 !.gitignore
+!.grenrc.yml
 !.editorconfig
 target/

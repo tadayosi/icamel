@@ -1,0 +1,14 @@
+---
+dataSource: "commits"
+prefix: ""
+includeMessages: "commits"
+ignoreCommitsWith:
+  - "doc"
+  - "chore"
+  - "maven-release-plugin"
+changelogFilename: "CHANGELOG.md"
+groupBy:
+  Features:
+    - "feat"
+  Bug Fixes:
+    - "fix"
