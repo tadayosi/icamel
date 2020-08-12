@@ -168,8 +168,7 @@ public class CamelKernel extends BaseKernel {
             at = at + "// camel".length() + 1;
         }
 
-        TextDocumentService textDocumentService = getTextDocumentService(code, filename);
-        List<CompletionItem> completions = getCompletions(textDocumentService, code, at, filename);
+        List<CompletionItem> completions = getCompletions(code, at, filename);
         List<String> options = completions.stream()
             .map(CompletionItem::getLabel)
             .collect(Collectors.toList());
@@ -201,7 +200,8 @@ public class CamelKernel extends BaseKernel {
         return languageServer.getTextDocumentService();
     }
 
-    private List<CompletionItem> getCompletions(TextDocumentService textDocumentService, String code, int at, String filename) throws Exception {
+    private List<CompletionItem> getCompletions(String code, int at, String filename) throws Exception {
+        TextDocumentService textDocumentService = getTextDocumentService(code, filename);
         CompletionParams params = new CompletionParams(
             new TextDocumentIdentifier(filename), CompletionHelper.position(code, at));
         return textDocumentService.completion(params).get().getLeft();
