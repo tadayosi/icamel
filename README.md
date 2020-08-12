@@ -2,6 +2,16 @@
 
 This kernel enables you to run [Apache Camel](https://camel.apache.org/) routes in Jupyter notebooks.
 
+![ICamel notebook](docs/img/icamel.png)
+
+## Table of Contents
+
+* [Prerequisites](#prerequisites)
+* [Supported Camel route languages](#supported-camel-route-languages)
+* [Supported Camel components](#supported-camel-components)
+* [Installing](#installing)
+* [Build from source](#build-from-source)
+
 ## Prerequisites
 
 - [Jupyter](https://jupyter.org/install)
