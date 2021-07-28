@@ -1,6 +1,13 @@
 {
   "argv": [
     "java",
+    "-Dorg.slf4j.simpleLogger.logFile=System.out",
+    "-Dorg.slf4j.simpleLogger.showDateTime=true",
+    "-Dorg.slf4j.simpleLogger.dateTimeFormat=HH:mm:ss.SSS",
+    "-Dorg.slf4j.simpleLogger.defaultLogLevel=INFO",
+    "-Dorg.slf4j.simpleLogger.log.io.github.tadayosi.icamel=INFO",
+    "-Dorg.slf4j.simpleLogger.log.org.apache.camel=WARN",
+    "-Dorg.slf4j.simpleLogger.log.com.github.cameltooling.lsp=WARN",
     "-jar",
     "<your-camel-kernel-dir>/icamel-0.x.jar",
     "{connection_file}"
