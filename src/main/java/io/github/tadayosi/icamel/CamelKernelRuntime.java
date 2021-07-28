@@ -5,12 +5,8 @@ import java.util.Collection;
 import org.apache.camel.CamelContext;
 import org.apache.camel.impl.DefaultCamelContext;
 import org.apache.camel.k.Runtime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class CamelKernelRuntime implements Runtime {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(CamelKernelRuntime.class);
 
     private final DefaultCamelContext context;
 

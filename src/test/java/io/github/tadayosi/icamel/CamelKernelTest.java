@@ -34,10 +34,10 @@ public class CamelKernelTest {
     @Test
     public void testEval() throws Exception {
         MockEndpoint out = context.getEndpoint("mock:out", MockEndpoint.class);
-        out.expectedMessageCount(1);
+        out.expectedMessageCount(5);
 
         kernel.eval("console.log('hello')");
-        kernel.eval("from('timer:tick?repeatCount=1').to('mock:out')");
+        kernel.eval("from('timer:tick?repeatCount=5&period=100').to('mock:out')");
 
         assertThat(context.getStatus()).isEqualTo(ServiceStatus.Started);
         assertThat(context.getRoutes()).hasSize(1);

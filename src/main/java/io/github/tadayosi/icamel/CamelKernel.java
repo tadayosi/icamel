@@ -14,7 +14,7 @@ import io.github.spencerpark.jupyter.kernel.display.DisplayData;
 import io.github.spencerpark.jupyter.messages.Header;
 import org.apache.camel.k.Runtime;
 import org.apache.camel.k.Source;
-import org.apache.camel.k.listener.RoutesConfigurer;
+import org.apache.camel.k.support.SourcesSupport;
 import org.eclipse.lsp4j.CompletionItem;
 import org.eclipse.lsp4j.CompletionParams;
 import org.eclipse.lsp4j.DidOpenTextDocumentParams;
@@ -61,14 +61,31 @@ public class CamelKernel extends BaseKernel {
     private final CamelLanguageServer languageServer;
 
     public CamelKernel() {
-        languageInfo = new LanguageInfo.Builder("Camel")
+        languageInfo = buildLanguageInfo();
+        banner = buildBanner();
+        helpLinks = buildHelpLinks();
+
+        languageResolver = new LanguageResolver();
+
+        languageServer = new CamelLanguageServer();
+        startLanguageServer();
+
+        runtime = new CamelKernelRuntime();
+        startRuntime();
+    }
+
+    protected LanguageInfo buildLanguageInfo() {
+        return new LanguageInfo.Builder("Camel")
             .version(CAMEL_VERSION)
             .mimetype("text/javascript")
             .fileExtension(".js")
             .pygments("javascript")
             .codemirror("javascript")
             .build();
-        banner = new StringBuilder()
+    }
+
+    protected String buildBanner() {
+        return new StringBuilder()
             .append(String.format("ICamel kernel %s\n", VERSION))
             .append(String.format("Camel %s\n", CAMEL_VERSION))
             .append(String.format("Camel K %s\n", CAMEL_K_VERSION))
@@ -79,17 +96,12 @@ public class CamelKernel extends BaseKernel {
                 KERNEL_META.getOrDefault("version", "UNKNOWN")))
             .append(String.format("Java %s", java.lang.Runtime.version()))
             .toString();
-        helpLinks = List.of(
+    }
+
+    protected List<LanguageInfo.Help> buildHelpLinks() {
+        return List.of(
             new LanguageInfo.Help("ICamel", "https://github.com/tadayosi/icamel")
         );
-
-        languageResolver = new LanguageResolver();
-
-        languageServer = new CamelLanguageServer();
-        startLanguageServer();
-
-        runtime = new CamelKernelRuntime();
-        startRuntime();
     }
 
     private void startLanguageServer() {
@@ -143,8 +155,10 @@ public class CamelKernel extends BaseKernel {
 
     @Override
     public DisplayData eval(String expr) {
+        LOGGER.debug("eval - expr: {}", expr);
+
         Source source = languageResolver.toSource(expr);
-        RoutesConfigurer.load(runtime, source);
+        SourcesSupport.load(runtime, source);
         return null;
     }
 
