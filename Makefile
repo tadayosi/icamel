@@ -5,8 +5,8 @@ build:
 
 deploy:
 	mkdir -p $(KERNEL_PATH)
-	cp target/icamel-0.4-SNAPSHOT-runner.jar $(KERNEL_PATH)/
+	cp target/icamel-0.5-SNAPSHOT-runner.jar $(KERNEL_PATH)/
 	./bin/deploy-kernel-json.sh
 
 test-run:
-	java -jar target/icamel-0.4-SNAPSHOT-runner.jar
+	java -jar target/icamel-0.5-SNAPSHOT-runner.jar
