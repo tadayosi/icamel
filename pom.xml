@@ -30,11 +30,13 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>11</maven.compiler.source>
     <maven.compiler.target>11</maven.compiler.target>
+    <quarkus.package.type>uber-jar</quarkus.package.type>
 
     <camel.version>3.11.0</camel.version>
     <camel.k.version>1.5.0</camel.k.version>
     <camel.lsp.version>1.1.0</camel.lsp.version>
     <jupyter.jvm.basekernel.version>2.3.0</jupyter.jvm.basekernel.version>
+    <quarkus.platform.version>2.0.3.Final</quarkus.platform.version>
   </properties>
 
   <dependencyManagement>
@@ -53,14 +55,34 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+      <dependency>
+        <groupId>io.quarkus</groupId>
+        <artifactId>quarkus-universe-bom</artifactId>
+        <version>${quarkus.platform.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
   <dependencies>
     <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-arc</artifactId>
+    </dependency>
+
+    <!--
+    <dependency>
       <groupId>io.github.spencerpark</groupId>
       <artifactId>jupyter-jvm-basekernel</artifactId>
       <version>${jupyter.jvm.basekernel.version}</version>
+    </dependency>
+    -->
+    <!-- jitpack icamel branch -->
+    <dependency>
+      <groupId>com.github.tadayosi</groupId>
+      <artifactId>jupyter-jvm-basekernel</artifactId>
+      <version>${jupyter.jvm.basekernel.version}-icamel</version>
     </dependency>
 
     <!-- Camel -->
@@ -136,11 +158,13 @@
     </dependency>
 
     <!-- logging -->
+    <!--
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
       <version>1.7.31</version>
     </dependency>
+    -->
 
     <!-- testing -->
     <dependency>
@@ -170,75 +194,18 @@
       </resource>
     </resources>
     <plugins>
-      <!--
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <version>3.3.0</version>
-        <configuration>
-          <descriptorRefs>
-            <descriptorRef>jar-with-dependencies</descriptorRef>
-          </descriptorRefs>
-          <appendAssemblyId>false</appendAssemblyId>
-          <archive>
-            <manifest>
-              <mainClass>io.github.tadayosi.icamel.ICamel</mainClass>
-            </manifest>
-          </archive>
-        </configuration>
+        <groupId>io.quarkus</groupId>
+        <artifactId>quarkus-maven-plugin</artifactId>
+        <version>${quarkus.platform.version}</version>
+        <extensions>true</extensions>
         <executions>
           <execution>
-            <phase>package</phase>
             <goals>
-              <goal>single</goal>
+              <goal>build</goal>
+              <goal>generate-code</goal>
+              <goal>generate-code-tests</goal>
             </goals>
-          </execution>
-        </executions>
-      </plugin>
-      -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-shade-plugin</artifactId>
-        <version>3.2.4</version>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>shade</goal>
-            </goals>
-            <configuration>
-              <transformers>
-                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                  <mainClass>io.github.tadayosi.icamel.ICamel</mainClass>
-                  <manifestEntries>
-                    <Multi-Release>true</Multi-Release>
-                  </manifestEntries>
-                </transformer>
-              </transformers>
-              <filters>
-                <filter>
-                  <artifact>org.apache.camel.k:camel-k-runtime-main</artifact>
-                  <excludes>
-                    <exclude>log4j2.properties</exclude>
-                  </excludes>
-                </filter>
-                <filter>
-                  <artifact>*:*</artifact>
-                  <excludes>
-                    <exclude>**/Log4j2Plugins.dat</exclude>
-                  </excludes>
-                </filter>
-                <filter>
-                  <artifact>*:*</artifact>
-                  <excludes>
-                    <exclude>META-INF/*.SF</exclude>
-                    <exclude>META-INF/*.DSA</exclude>
-                    <exclude>META-INF/*.RSA</exclude>
-                  </excludes>
-                </filter>
-              </filters>
-              <createDependencyReducedPom>false</createDependencyReducedPom>
-            </configuration>
           </execution>
         </executions>
       </plugin>

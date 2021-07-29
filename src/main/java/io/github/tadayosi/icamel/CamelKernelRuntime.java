@@ -19,8 +19,4 @@ public class CamelKernelRuntime implements Runtime {
     public CamelContext getCamelContext() {
         return context;
     }
-
-    @Override
-    public void setPropertiesLocations(Collection<String> locations) {
-    }
 }
