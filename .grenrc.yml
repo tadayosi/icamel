@@ -6,6 +6,7 @@ ignoreCommitsWith:
   - "doc"
   - "chore"
   - "maven-release-plugin"
+  - "refactor"
 changelogFilename: "CHANGELOG.md"
 groupBy:
   Features:
