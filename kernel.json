@@ -9,7 +9,7 @@
     "-Dquarkus.log.category.\"com.github.cameltooling.lsp\".level=WARN",
     "-Dquarkus.log.category.\"io.github.tadayosi.icamel\".level=INFO",
     "-jar",
-    "<your-camel-kernel-dir>/icamel-0.x.jar",
+    "<your-camel-kernel-dir>/icamel-0.x-runner.jar",
     "{connection_file}"
   ],
   "display_name": "Camel",
